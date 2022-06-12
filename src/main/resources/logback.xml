@@ -1,5 +1,6 @@
 <configuration>
-    <property name="HOME_LOG" value="logs/app.log"/>
+    <property name="HOME_LOG" value="/var/logs/app.log"/>
+    <property name="HOME_LOG_JSON" value="/var/logs/app_json.log"/>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${HOME_LOG}</file>
@@ -24,9 +25,30 @@
         </encoder>
     </appender>
 
+    <appender name="JSON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+            <jsonFormatter
+                    class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                <prettyPrint>true</prettyPrint>
+            </jsonFormatter>
+            <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
+        </layout>
+        <file>${HOME_LOG_JSON}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/archived/app_json.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <!-- each archived file, size max 10MB -->
+            <maxFileSize>10MB</maxFileSize>
+            <!-- total size of all archive files, if total size > 20GB, it will delete old archived file -->
+            <totalSizeCap>20GB</totalSizeCap>
+            <!-- 60 days to keep -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+    </appender>
+
     <root level="info">
         <appender-ref ref="FILE"/>
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="JSON_FILE"/>
     </root>
 
 </configuration>
