@@ -1,0 +1,21 @@
+filebeat.inputs:
+  - type: filestream
+    id: my-filestream-id
+    enabled: true
+    paths:
+      - /var/logs/*.log
+    prospector.scanner.check_interval: 5s
+    parsers:
+      - ndjson: null
+        keys_under_root: false
+fields:
+  env: staging
+fields_under_root: true
+processors:
+  - add_host_metadata: null
+output.logstash:
+  enabled: true
+  hosts:
+    - 'localhost:5044'
+logging.to_files: true
+logging.files: null
