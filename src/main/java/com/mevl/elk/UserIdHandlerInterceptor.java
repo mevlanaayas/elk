@@ -13,12 +13,12 @@ public class UserIdHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        MDC.put("user_id", UUID.randomUUID().toString());
+        MDC.put("userId", UUID.randomUUID().toString());
         return true;
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        MDC.remove("user_id");
+        MDC.remove("userId");
     }
 }
